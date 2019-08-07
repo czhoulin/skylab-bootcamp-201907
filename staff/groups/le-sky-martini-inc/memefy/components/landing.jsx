@@ -26,21 +26,9 @@ class Landing extends Component {
         this.handleFavorites = this.handleFavorites.bind(this)
         this.handleGoToSearch = this.handleGoToSearch.bind(this)
         this.handleToggleFavGifFromFavorites = this.handleToggleFavGifFromFavorites.bind(this)
-        // this.handleRegisterOrLogin = this.handleRegisterOrLogin.bind(this)
-        // this.handleGoToRegisterOrLogin = this.handleGoToRegisterOrLogin.bind(this)
+
     }
 
-    // handleRegisterOrLogin(event) {
-    //     event.preventDefault()
-
-    //      this.props.onLogin()
-    // }
-
-    // handleGoToRegisterOrLogin(event) {
-    //     event.preventDefault()
-
-    //     this.setState({ view: 'registerorlogin' })
-    // }
 
 
     componentWillMount() {
@@ -72,34 +60,6 @@ class Landing extends Component {
             })
             .catch(({ message }) => this.setState({ error: message }))
     }
-
-    // handleCatAnimals() {
-    //     const { props: { credentials } } = this
-
-    //     let id, token
-
-    //     credentials && (id = credentials.id, token = credentials.token)
-
-    //     logic.searchAnimals(id, token)
-    //         .then(gifs => this.setState({ gifs }))
-    //         .then(( )=>{
-    //         })
-    //         .catch(({ message }) => this.setState({ error: message }))
-    // }
-
-    // handleCatCats() {
-    //     const { props: { credentials } } = this
-
-    //     let id, token
-
-    //     credentials && (id = credentials.id, token = credentials.token)
-
-    //     logic.searchCats(id, token)
-    //         .then(gifs => this.setState({ gifs }))
-    //         .then(( )=>{
-    //         })
-    //         .catch(({ message }) => this.setState({ error: message }))
-    // }
 
     handleCatCats(query) {
         const { props: { credentials } } = this
@@ -213,6 +173,8 @@ class Landing extends Component {
             })
             .catch(({ message }) => this.setState({ error: message }))
     }
+
+
 
 
 
