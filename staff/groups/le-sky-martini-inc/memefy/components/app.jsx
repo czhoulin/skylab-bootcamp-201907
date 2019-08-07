@@ -10,7 +10,8 @@ class App extends Component {
 
         id && token && (credentials = { id, token })
 
-        this.state = { view: 'landing', credentials, error: undefined } // view: 'register', 'login', ...
+        this.state = { view: 'landing', credentials, error: undefined }
+         // view: 'register', 'login', ...
 
         this.handleGoToRegister = this.handleGoToRegister.bind(this)
         this.handleBackToLanding = this.handleBackToLanding.bind(this)
