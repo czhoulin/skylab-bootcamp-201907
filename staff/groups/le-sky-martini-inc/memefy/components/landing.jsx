@@ -106,9 +106,11 @@ class Landing extends Component {
 
         let id, token
 
+        query="cat"
+
         credentials && (id = credentials.id, token = credentials.token)
 
-        logic.searchGifs(id, token, `cats`)
+        logic.searchGifs(id, token, query)
             .then(gifs => this.setState({ gifs, query }))
             .then(( )=>{
             })
@@ -120,9 +122,11 @@ class Landing extends Component {
 
         let id, token
 
+        query="animals"
+
         credentials && (id = credentials.id, token = credentials.token)
 
-        logic.searchGifs(id, token, `animals`)
+        logic.searchGifs(id, token, query)
             .then(gifs => this.setState({ gifs, query }))
             .then(( )=>{
             })
@@ -135,9 +139,11 @@ class Landing extends Component {
 
         let id, token
 
+        query="dog"
+
         credentials && (id = credentials.id, token = credentials.token)
 
-        logic.searchGifs(id, token, `dogs`)
+        logic.searchGifs(id, token, query)
             .then(gifs => this.setState({ gifs, query }))
             .then(( )=>{
             })
@@ -149,9 +155,11 @@ class Landing extends Component {
 
         let id, token
 
+        query="baby"
+
         credentials && (id = credentials.id, token = credentials.token)
 
-        logic.searchGifs(id, token, `babies`)
+        logic.searchGifs(id, token, query)
             .then(gifs => this.setState({ gifs, query }))
             .then(( )=>{
             })
@@ -163,9 +171,11 @@ class Landing extends Component {
 
         let id, token
 
+        query="morning"
+
         credentials && (id = credentials.id, token = credentials.token)
 
-        logic.searchGifs(id, token, `morning`)
+        logic.searchGifs(id, token, query)
             .then(gifs => this.setState({ gifs, query }))
             .then(( )=>{
             })
@@ -178,9 +188,11 @@ class Landing extends Component {
 
         let id, token
 
+        query="celebrate"
+
         credentials && (id = credentials.id, token = credentials.token)
 
-        logic.searchGifs(id, token, `celebrate`)
+        logic.searchGifs(id, token, query)
             .then(gifs => this.setState({ gifs, query }))
             .then(( )=>{
             })
@@ -191,10 +203,11 @@ class Landing extends Component {
         const { props: { credentials } } = this
 
         let id, token
+        query="think"
 
         credentials && (id = credentials.id, token = credentials.token)
 
-        logic.searchGifs(id, token, `think`)
+        logic.searchGifs(id, token, query)
             .then(gifs => this.setState({ gifs, query }))
             .then(( )=>{
             })

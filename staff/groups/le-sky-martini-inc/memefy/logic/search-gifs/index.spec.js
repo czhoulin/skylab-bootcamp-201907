@@ -36,9 +36,9 @@
                 .then(gifs => expect(gifs.length).toBe(0))
         )
 
-        it('should fail on undefined query', () =>
-            expect(() => logic.searchGifs()).toThrowError(TypeError, `query with value undefined is not a string`)
-        )
+                it('should fail on undefined query', () =>
+                    expect(() => logic.searchGifs()).toThrowError(TypeError, `query with value undefined is not a string`)
+                )
 
         // TODO test more cases
 
