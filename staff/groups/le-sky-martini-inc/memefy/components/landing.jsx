@@ -8,6 +8,13 @@ class Landing extends Component {
         // view: 'search', 'favorites'
 
         this.handleSearch = this.handleSearch.bind(this)
+        this.handleCatCats = this.handleCatCats.bind(this)
+        this.handleCatDogs = this.handleCatDogs.bind(this)
+        this.handleCatBabies = this.handleCatBabies.bind(this)
+        this.handleCatMorning = this.handleCatMorning.bind(this)
+        this.handleCatCelebrate = this.handleCatCelebrate.bind(this)
+        this.handleCatThink = this.handleCatThink.bind(this)
+        this.handleCatAnimals= this.handleCatAnimals.bind(this)
         this.handleRetrieveGif = this.handleRetrieveGif.bind(this)
         this.handleBackFromDetail = this.handleBackFromDetail.bind(this)
         this.handleRegister = this.handleRegister.bind(this)
@@ -19,21 +26,9 @@ class Landing extends Component {
         this.handleFavorites = this.handleFavorites.bind(this)
         this.handleGoToSearch = this.handleGoToSearch.bind(this)
         this.handleToggleFavGifFromFavorites = this.handleToggleFavGifFromFavorites.bind(this)
-        // this.handleRegisterOrLogin = this.handleRegisterOrLogin.bind(this)
-        // this.handleGoToRegisterOrLogin = this.handleGoToRegisterOrLogin.bind(this)
+
     }
 
-    // handleRegisterOrLogin(event) {
-    //     event.preventDefault()
-
-    //      this.props.onLogin()
-    // }
-
-    // handleGoToRegisterOrLogin(event) {
-    //     event.preventDefault()
-
-    //     this.setState({ view: 'registerorlogin' })
-    // }
 
 
     componentWillMount() {
@@ -65,6 +60,123 @@ class Landing extends Component {
             })
             .catch(({ message }) => this.setState({ error: message }))
     }
+
+    handleCatCats(query) {
+        const { props: { credentials } } = this
+
+        let id, token
+
+        query="cat"
+
+        credentials && (id = credentials.id, token = credentials.token)
+
+        logic.searchGifs(id, token, query)
+            .then(gifs => this.setState({ gifs, query }))
+            .then(( )=>{
+            })
+            .catch(({ message }) => this.setState({ error: message }))
+    }
+
+    handleCatAnimals(query) {
+        const { props: { credentials } } = this
+
+        let id, token
+
+        query="animals"
+
+        credentials && (id = credentials.id, token = credentials.token)
+
+        logic.searchGifs(id, token, query)
+            .then(gifs => this.setState({ gifs, query }))
+            .then(( )=>{
+            })
+            .catch(({ message }) => this.setState({ error: message }))
+    }
+
+
+    handleCatDogs(query) {
+        const { props: { credentials } } = this
+
+        let id, token
+
+        query="dog"
+
+        credentials && (id = credentials.id, token = credentials.token)
+
+        logic.searchGifs(id, token, query)
+            .then(gifs => this.setState({ gifs, query }))
+            .then(( )=>{
+            })
+            .catch(({ message }) => this.setState({ error: message }))
+    }
+
+    handleCatBabies(query) {
+        const { props: { credentials } } = this
+
+        let id, token
+
+        query="baby"
+
+        credentials && (id = credentials.id, token = credentials.token)
+
+        logic.searchGifs(id, token, query)
+            .then(gifs => this.setState({ gifs, query }))
+            .then(( )=>{
+            })
+            .catch(({ message }) => this.setState({ error: message }))
+    }
+
+    handleCatMorning(query) {
+        const { props: { credentials } } = this
+
+        let id, token
+
+        query="morning"
+
+        credentials && (id = credentials.id, token = credentials.token)
+
+        logic.searchGifs(id, token, query)
+            .then(gifs => this.setState({ gifs, query }))
+            .then(( )=>{
+            })
+            .catch(({ message }) => this.setState({ error: message }))
+    }
+
+
+    handleCatCelebrate(query) {
+        const { props: { credentials } } = this
+
+        let id, token
+
+        query="celebrate"
+
+        credentials && (id = credentials.id, token = credentials.token)
+
+        logic.searchGifs(id, token, query)
+            .then(gifs => this.setState({ gifs, query }))
+            .then(( )=>{
+            })
+            .catch(({ message }) => this.setState({ error: message }))
+    }
+
+    handleCatThink(query) {
+        const { props: { credentials } } = this
+
+        let id, token
+        query="think"
+
+        credentials && (id = credentials.id, token = credentials.token)
+
+        logic.searchGifs(id, token, query)
+            .then(gifs => this.setState({ gifs, query }))
+            .then(( )=>{
+            })
+            .catch(({ message }) => this.setState({ error: message }))
+    }
+
+
+
+
 
     handleRetrieveGif(gifId) {
         const { props: { credentials } } = this
@@ -173,7 +285,9 @@ class Landing extends Component {
             handleBackFromDetail, handleLogin, handleLogout,
             handleToggleFavGifFromGifItem, handleToggleFavGifFromGifDetail,
             handleAcceptError, handleFavorites, handleGoToSearch,
-            handleToggleFavGifFromFavorites
+            handleToggleFavGifFromFavorites, handleCatAnimals,
+            handleCatCats, handleCatDogs, handleCatBabies,
+            handleCatMorning, handleCatCelebrate, handleCatThink
         } = this
 
         return <>
@@ -200,7 +314,10 @@ class Landing extends Component {
 
             {view === 'search' && <>
                 <h3>Search</h3>
-                <Search onSearch={handleSearch} />
+                <Search onSearch={handleSearch}  />
+                <Categories onClickCatAnimals={handleCatAnimals} onClickCatCats={handleCatCats} onClickCatDogs={handleCatDogs} onClickCatBabies={handleCatBabies} onClickCatMorning={handleCatMorning} onClickCatCelebrate={handleCatCelebrate} onClickCatThink={handleCatThink}/>
+
+                
 
                 {!gif ?
                     <Results items={gifs} paintItem={gif => {
