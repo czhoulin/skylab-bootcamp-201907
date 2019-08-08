@@ -6,10 +6,10 @@
 
         beforeEach(() => {
             user = {
-                name: 'John-' + random(),
-                surname: 'Doe-' + random(),
-                username: 'johndoe-' + random() + '@mail.com',
-                password: '123-' + random(),
+                name: 'LePink-' + random(),
+                surname: 'Martini-' + random(),
+                username: 'lepinkmartini-' + random() + '@mail.com',
+                password: 'zzz-' + random(),
                 favorites: []
             }
 
@@ -44,6 +44,5 @@
             ).toThrowError(Error, 'id is empty or blank')
         )
 
-        // TODO test more cases
     })
 }

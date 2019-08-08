@@ -30,5 +30,5 @@ describe('call', () => {
         })
     })
 
-    // TODO test delete and patch
+    // TODO test delete and patch para el panel de usuario para cambiar contrasenya, nombre y borrar cuenta.
 })
