@@ -8,8 +8,8 @@
     "watch": "npx nodemon .",
     "debug": "node debug .",
     "test": "npx mocha logic/**/**/*.spec.js",
-    "test-debug": "npx mocha debug logic/**/*.spec.js",
-    "test-inspect": "npx mocha --inspect-brk logic/**/*.spec.js"
+    "test-debug": "npx mocha debug logic/**/**/*.spec.js",
+    "test-inspect": "npx mocha --inspect-brk logic/**/**/*.spec.js"
   },
   "keywords": [],
   "author": "",

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 
 const { Schema, Schema: { Types: { ObjectId } } } = mongoose
+/* const { Schema, ObjectId } = mongoose ??? */
 
 module.exports = new Schema({
     brand: {
@@ -31,8 +32,8 @@ module.exports = new Schema({
         default: false
     },
     plate: {
-        type: Number,
+        type: String,
         required: true
     },
-    owner: { type: ObjectId, ref: 'User' }
+    owner: [{ type: ObjectId, ref: 'User' }]
 })

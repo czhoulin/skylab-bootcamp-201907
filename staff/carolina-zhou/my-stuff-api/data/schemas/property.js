@@ -1,6 +1,7 @@
-const mongoose = require('mongoose')
+/* const mongoose = require('mongoose')
+const { Schema, Schema: { Types: { ObjectId } } } = mongoose */
 
-const { Schema, Schema: { Types: { ObjectId } } } = mongoose
+const { Schema, ObjectId } = require('mongoose')
 
 module.exports = new Schema({
     address: {

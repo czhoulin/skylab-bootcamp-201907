@@ -1,6 +1,8 @@
-const mongoose = require('mongoose')
+/* const mongoose = require('mongoose')
+const { Schema } = mongoose */
 
-const { Schema } = mongoose
+const { Schema } = require('mongoose')
+const cardSchema = require('./card') 
 
 module.exports = new Schema({
     name: {
@@ -20,6 +22,7 @@ module.exports = new Schema({
     password: {
         type: String,
         required: true
-    }/* ,
-    cards: [cardSchema] */
+    },
+
+    cards: [cardSchema]
 })

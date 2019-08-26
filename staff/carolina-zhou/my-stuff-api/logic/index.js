@@ -4,5 +4,5 @@ module.exports = {
     retrieveUser: require('./user/retrieve-user'),
     updateUser: require('./user/update-user'),
     unregisterUser: require('./user/unregister-user'),
-    addVehicle: require('./add-vehicle')
+    registerVehicle: require('./vehicle/register-vehicle')
 }
