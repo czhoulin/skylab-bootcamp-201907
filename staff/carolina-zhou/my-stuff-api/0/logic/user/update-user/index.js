@@ -12,6 +12,7 @@ const validate = require('../../../utils/validate')
  */
 module.exports = function (id, data) {
     validate.string(id, 'id')
+    validate.object(data, 'body')
 
     // Inadequate solution
     /* return this.__users__.updateOne({ _id: ObjectId(id) }, { $set: data })

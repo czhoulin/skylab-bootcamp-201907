@@ -72,6 +72,42 @@ describe('logic - update user', () => {
             .catch(({ message }) => expect(message).to.equal(`user with id ${id} does not exist`))
     })
 
+    it('should fail on empty id', () => 
+        expect(() => 
+               logic.updateUser('', body)
+    ).to.throw('id is empty or blank')
+    )
+
+     it('should fail on undefined id', () => 
+        expect(() => 
+               logic.updateUser(undefined, body)
+    ).to.throw(`id with value undefined is not a string`)
+    )
+
+     it('should fail on wrong id data type', () => 
+        expect(() => 
+               logic.updateUser(123, body)
+    ).to.throw(`id with value 123 is not a string`)
+    )
+
+    it('should fail on empty body', () => 
+        expect(() => 
+               logic.updateUser(id, '')
+    ).to.throw('body is empty or blank')
+    )
+
+     it('should fail on undefined body', () => 
+        expect(() => 
+               logic.updateUser(id, undefined)
+    ).to.throw(`body with value undefined is not an object`)
+    )
+
+     it('should fail on wrong body data type', () => 
+        expect(() => 
+               logic.updateUser(id, 123)
+    ).to.throw(`body with value 123 is not an object`)
+    )
+
     // after(() => client.close())
     after(() => mongoose.disconnect())
 })

@@ -62,6 +62,43 @@ describe('logic - unregister user', () => {
             .catch(({ message }) => expect(message).to.equal('wrong credentials'))
     )
 
+    it('should fail on empty id', () => 
+        expect(() => 
+               logic.unregisterUser('', password)
+    ).to.throw('id is empty or blank')
+    )
+
+     it('should fail on undefined id', () => 
+        expect(() => 
+               logic.unregisterUser(undefined, password)
+    ).to.throw(`id with value undefined is not a string`)
+    )
+
+     it('should fail on wrong id data type', () => 
+        expect(() => 
+               logic.unregisterUser(123, password)
+    ).to.throw(`id with value 123 is not a string`)
+    )
+
+    it('should fail on empty password', () => 
+        expect(() => 
+               logic.unregisterUser(id, '')
+    ).to.throw('password is empty or blank')
+    )
+
+     it('should fail on undefined password', () => 
+        expect(() => 
+               logic.unregisterUser(id, undefined)
+    ).to.throw(`password with value undefined is not a string`)
+    )
+
+     it('should fail on wrong password data type', () => 
+        expect(() => 
+               logic.unregisterUser(id, 123)
+    ).to.throw(`password with value 123 is not a string`)
+    )
+
+
     // after(() => client.close())
     after(() => mongoose.disconnect())
 })

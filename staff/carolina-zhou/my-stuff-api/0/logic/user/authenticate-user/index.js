@@ -10,8 +10,7 @@ const validate = require('../../../utils/validate')
  * @returns {Promise}
  */
 module.exports = function (email, password) {
-    validate.string(email, 'username')
-    validate.email(email, 'username')
+    validate.email(email, 'email')
     validate.string(password, 'password')
 
     // this.__users__.findOne --> User.findOne

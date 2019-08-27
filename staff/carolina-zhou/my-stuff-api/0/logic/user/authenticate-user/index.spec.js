@@ -66,6 +66,36 @@ describe('logic - authenticate user', () => {
     })
     )
 
+     it('should fail on undefined email', () => 
+        expect(() => 
+               logic.authenticateUser(undefined, password)
+    ).to.throw(`email with value undefined is not a valid e-mail`)
+    )
+
+     it('should fail on wrong email data type', () => 
+        expect(() => 
+               logic.authenticateUser(123, password)
+    ).to.throw(`email with value 123 is not a valid e-mail`)
+    )
+
+    it('should fail on empty password', () => 
+        expect(() => 
+               logic.authenticateUser(email, '')
+    ).to.throw('password is empty or blank')
+    )
+
+     it('should fail on undefined password', () => 
+        expect(() => 
+               logic.authenticateUser(email, undefined)
+    ).to.throw(`password with value undefined is not a string`)
+    )
+
+     it('should fail on wrong password data type', () => 
+        expect(() => 
+               logic.authenticateUser(email, 123)
+    ).to.throw(`password with value 123 is not a string`)
+    )
+
     // after(() => client.close())
     after(() => mongoose.disconnect())
 })
