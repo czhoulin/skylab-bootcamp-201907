@@ -1,0 +1,22 @@
+const validate = require('../../../utils/validate')
+const { User, Vehicle } = require('../../../data')
+
+/**
+ * Retrieves a vehicle by its id
+ * 
+ * @param {string} id 
+ * 
+ * @returns {Promise}
+*/
+
+module.exports = function(id) {
+    
+    validate.string(id , 'vehicle ID')
+    
+    return Vehicle.findOne({_id: id }, {_id: 0, __v: 0 }).lean()
+        .then(vehicle => {
+            if (!vehicle) throw Error(`vehicle with id ${id} does not exist`)
+            vehicle.id = id 
+            return vehicle
+        })
+}
