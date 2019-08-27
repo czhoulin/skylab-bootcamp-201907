@@ -23,6 +23,5 @@ module.exports = new Schema({
         type: String,
         required: true
     },
-
     cards: [cardSchema]
 })

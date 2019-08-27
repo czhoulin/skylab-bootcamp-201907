@@ -12,17 +12,11 @@ describe('logic - validate', () => {
             expect(result).to.be.undefined
 
         })
-        it('should fail on non correct string', () => {
+        it('should fail on incorrect string', () => {
             expect(() =>
                 validate.string(123, 'string')).to.throw(Error, `string with value 123 is not a string`)
 
         })
-        it('should fail on empty string', () => {
-            expect(() =>
-                validate.string('', 'string')).to.throw(Error, `string is empty or blank`)
-
-        })
-
         it('should fail on empty string', () => {
             expect(() =>
                 validate.string('', 'string')).to.throw(Error, `string is empty or blank`)
@@ -36,7 +30,7 @@ describe('logic - validate', () => {
             expect(result).to.be.undefined
 
         })
-        it('should fail on non correct email', () => {
+        it('should fail on incorrect email', () => {
             expect(() =>
                 validate.email(123, 'email')).to.throw(Error, `email with value 123 is not a valid e-mail`)
 
@@ -50,12 +44,22 @@ describe('logic - validate', () => {
                 expect(result).to.be.undefined
 
             })
-            it('should fail on non correct URL', () => {
+            it('should fail on incorrect URL', () => {
                 expect(() =>
                     validate.url(123, 'url')).to.throw(Error, `url with value 123 is not a valid URL`)
 
             })
         })
-    // TODO MORE TESTS
+
+    describe("function", () => {
+        it ("should succeed on correct  function", () => {
+            const func = function funct() {}
+            validate.function(func,"function")
+            expect(true).to.be.true 
+        })
+        it ("should fail on incorrect function",() => {
+            expect(() => { validate.function("hola", "function") }).to.throw(Error, "function with value hola is not a function")
+        })
+    })
 
 })

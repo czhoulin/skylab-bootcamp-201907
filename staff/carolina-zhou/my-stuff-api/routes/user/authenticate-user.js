@@ -1,4 +1,4 @@
-const logic = require('../logic')
+const logic = require('../../logic')
 const jwt = require('jsonwebtoken')
 
 const { env: { JWT_SECRET } } = process

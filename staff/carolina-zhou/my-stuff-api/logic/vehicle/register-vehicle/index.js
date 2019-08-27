@@ -2,7 +2,7 @@ const validate = require('../../../utils/validate')
 const { User, Vehicle } = require('../../../data')
 
 /**
- * Adds vehicle.
+ * Registers a vehicle.
  * 
  * @param {string} brand 
  * @param {string} model 
@@ -55,6 +55,7 @@ module.exports = function (brand, model, year, type, color, electric, plate, id)
             .then(() => Vehicle.findOne({ plate })
             ).then(response => {
                 if (!response) throw new Error(`vehicle with plate ${plate} does not exist`)
-                return response._id.toString()
+                vehicleId = response._id.toString()
+                return vehicleId
             })
 }

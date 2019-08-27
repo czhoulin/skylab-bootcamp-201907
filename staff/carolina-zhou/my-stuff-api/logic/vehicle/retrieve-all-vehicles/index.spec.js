@@ -1,13 +1,13 @@
 const { expect } = require('chai')
 const logic = require('../../')
-const { User, Vehicle } = require('../../../data')
+const { User, Vehicle} = require('../../../data')
 const mongoose = require('mongoose')
 
-describe('logic - register vehicle', () => {
+describe('logic - retrieve all vehicles', () => {
 
     before(() => mongoose.connect('mongodb://localhost/my-api-test', { useNewUrlParser: true }))
     
-    let brand, model, year, type, color, electric, plate, id, vehicleId
+    let brand, model, year, type, color, electric, plate, id
 
     beforeEach(() => {
         const typeArray = ['tourism', 'suv', 'van', 'coupe', 'cabrio', 'roadster', 'truck']
@@ -33,13 +33,12 @@ describe('logic - register vehicle', () => {
     })
 
     it('should succeed on correct data', () =>
-        logic.registerVehicle(brand, model, year, type, color, electric, plate, id)
+        logic.retrieveAllVehicles(id)
             .then(result => {
-                vehicleId = result
-                expect(vehicleId).to.exist
+                expect(result).to.exist
                 return Vehicle.findOne({ plate })
             })
-            .then(vehicle => {
+            /* .then(vehicle => {
                 expect(vehicle).to.exist
                 expect(vehicle.id).to.equal(vehicleId)
                 expect(vehicle.brand).to.equal(brand)
@@ -48,36 +47,25 @@ describe('logic - register vehicle', () => {
                 expect(vehicle.type).to.equal(type)
                 expect(vehicle.color).to.equal(color)
                 expect(vehicle.electric).to.equal(electric)
-            })
+            }) */
     )
 
-    it('should fail if the vehicle already exists', () =>
-       Vehicle.create({ brand, model, year, type, color, electric, plate })
-           .then (() => logic.registerVehicle(brand, model, year, type, color, electric, plate, id)
-               .catch( error =>{
-                   expect(error).to.exist
-                   expect(error.message).to.equal(`vehicle already exists`)
-               })
-           )
-    )
-
-    // The following 3 tests can/should be applied to for every parameter passed to logic 
-    it('should fail on empty brand', () => 
+    it('should fail on empty id', () => 
         expect(() => 
-               logic.registerVehicle('', model, year, type, color, electric, plate, id)
-    ).to.throw('brand is empty or blank')
+               logic.retrieveAllVehicles('')
+        ).to.throw('user id is empty or blank')
     )
 
-     it('should fail on undefined brand', () => 
+    it('should fail on undefined id', () => 
         expect(() => 
-               logic.registerVehicle(undefined, model, year, type, color, electric, plate, id)
-    ).to.throw(`brand with value undefined is not a string`)
+               logic.retrieveAllVehicles(undefined)
+    ).to.throw(`user id with value undefined is not a string`)
     )
 
-     it('should fail on wrong data type', () => 
+    it('should fail on wrong data type', () => 
         expect(() => 
-               logic.registerVehicle(123, model, year, type, color, electric, plate, id)
-    ).to.throw(`brand with value 123 is not a string`)
+               logic.retrieveAllVehicles(123)
+    ).to.throw(`user id with value 123 is not a string`)
     )
 
     after(() => mongoose.disconnect())

@@ -35,5 +35,8 @@ module.exports = new Schema({
         type: String,
         required: true
     },
+    extra: {
+        type: String
+    },
     owner: [{ type: ObjectId, ref: 'User' }]
 })
