@@ -18,5 +18,6 @@ module.exports = {
     unregisterPropertyOwner: require('./property/unregister-owner'),
     registerCard: require('./card/register-card'),
     retrieveCard: require('./card/retrieve-card'),
+    retrieveAllCards: require('./card/retrieve-all-cards'),
     unregisterCard: require('./card/unregister-card')
 }

@@ -35,16 +35,54 @@ describe('logic - unregister card', () => {
         logic.unregisterCard(cardId, userId)
             .then(card => {
                 expect(card).not.to.exist
-              /*   expect(card.number).not.to.exist
+                /* expect(card.number).not.to.exist
                 expect(card.expiry).not.to.exist */
             })
     )
 
-/*     it('should fail on unexisting card', () =>
-        logic.unregisterCard('5d5d5530531d455f75da9fF9')
+    it('should fail on unexisting card', () =>
+        logic.unregisterCard('5d5d5530531d455f75da9fF9', userId)
             .then(() => { throw Error('should not reach this point') })
-            .catch(({ message }) => expect(message).to.equal('wrong credentials'))
-    ) */
+            .catch(({ message }) => expect(message).to.equal('card not found'))
+    )
+
+    // ID
+    it('should fail on empty id', () => 
+        expect(() => 
+               logic.unregisterCard('', userId)
+    ).to.throw('id is empty or blank')
+    )
+
+     it('should fail on undefined id', () => 
+        expect(() => 
+               logic.unregisterCard(undefined, userId)
+    ).to.throw(`id with value undefined is not a string`)
+    )
+
+     it('should fail on wrong id data type', () => 
+        expect(() => 
+               logic.unregisterCard(123, userId)
+    ).to.throw(`id with value 123 is not a string`)
+    )
+
+    // owner
+    it('should fail on empty owner', () => 
+        expect(() => 
+               logic.unregisterCard(cardId, '')
+    ).to.throw('owner is empty or blank')
+    )
+
+     it('should fail on undefined owner', () => 
+        expect(() => 
+               logic.unregisterCard(cardId, undefined)
+    ).to.throw(`owner with value undefined is not a string`)
+    )
+
+     it('should fail on wrong owner data type', () => 
+        expect(() => 
+               logic.unregisterCard(cardId, 123)
+    ).to.throw(`owner with value 123 is not a string`)
+    )
 
     after(() => mongoose.disconnect())
 })

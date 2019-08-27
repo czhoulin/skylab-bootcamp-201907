@@ -45,6 +45,24 @@ describe('logic - register card', () => {
             })
     )
 
+    it('should fail on empty id', () => 
+        expect(() => 
+               logic.registerCard('')
+    ).to.throw('id is empty or blank')
+    )
+
+     it('should fail on undefined id', () => 
+        expect(() => 
+               logic.registerCard(undefined)
+    ).to.throw(`id with value undefined is not a string`)
+    )
+
+     it('should fail on wrong id data type', () => 
+        expect(() => 
+               logic.registerCard(123)
+    ).to.throw(`id with value 123 is not a string`)
+    )
+
     after(() => mongoose.disconnect())
 })
 

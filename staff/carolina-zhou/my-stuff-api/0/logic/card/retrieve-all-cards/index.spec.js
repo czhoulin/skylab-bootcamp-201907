@@ -3,11 +3,11 @@ const logic = require('../../')
 const { expect } = require('chai')
 const { User, Card } = require('../../../data')
 
-describe('logic - retrieve card', () => {
+describe('logic - retrieve all cards', () => {
 
     before(() => mongoose.connect('mongodb://localhost/my-api-test', { useNewUrlParser: true }))
 
-    let cardId, number, expiry, userId
+    let userId
 
     beforeEach(() => {
 
@@ -32,54 +32,29 @@ describe('logic - retrieve card', () => {
     })
 
     it('should succeed on correct data', () =>
-        logic.retrieveCard(cardId, userId)
-            .then(card => {
-                expect(card).to.exist
-                expect(card._id.toString()).to.equal(cardId)
-                expect(card.number).to.equal(number)
-                expect(card.expiry).to.deep.equal(expiry)
+        logic.retrieveAllCards(userId)
+            .then(cards => {
+                expect(cards).to.exist
+                expect(cards.length).to.equal(1)
             })
-    )
-
-    it('should fail if the id is not a string', () =>
-        expect(() => logic.retrieveCard(1234).to.throw(`card with id ${1234} does not exist`))
-    )
-
-    // ID
-    it('should fail on empty id', () => 
-        expect(() => 
-               logic.retrieveCard('', userId)
-    ).to.throw('id is empty or blank')
-    )
-
-     it('should fail on undefined id', () => 
-        expect(() => 
-               logic.retrieveCard(undefined, userId)
-    ).to.throw(`id with value undefined is not a string`)
-    )
-
-     it('should fail on wrong id data type', () => 
-        expect(() => 
-               logic.retrieveCard(123, userId)
-    ).to.throw(`id with value 123 is not a string`)
     )
 
     // owner
     it('should fail on empty owner', () => 
         expect(() => 
-               logic.retrieveCard(cardId, '')
+               logic.retrieveAllCards('')
     ).to.throw('owner is empty or blank')
     )
 
      it('should fail on undefined owner', () => 
         expect(() => 
-               logic.retrieveCard(cardId, undefined)
+               logic.retrieveAllCards(undefined)
     ).to.throw(`owner with value undefined is not a string`)
     )
 
      it('should fail on wrong owner data type', () => 
         expect(() => 
-               logic.retrieveCard(cardId, 123)
+               logic.retrieveAllCards(123)
     ).to.throw(`owner with value 123 is not a string`)
     )
 

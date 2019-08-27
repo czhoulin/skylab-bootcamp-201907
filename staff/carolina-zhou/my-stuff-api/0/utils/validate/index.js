@@ -11,7 +11,8 @@ module.exports = {
         },
 
         number(target, name) {
-            if (typeof target !== 'number') throw TypeError(`${name} with value ${target} is not a number`)
+            if (typeof target !== 'number' && target !== '') throw TypeError(`${name} with value ${target} is not a number`)
+            if (target === '') throw new Error(`${name} is empty or blank`)
         },
 
         boolean(target, name) {

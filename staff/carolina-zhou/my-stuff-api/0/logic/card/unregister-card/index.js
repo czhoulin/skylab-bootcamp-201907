@@ -18,7 +18,7 @@ module.exports = function(id, owner) {
             
             const { cards } = user
             const index = cards.findIndex(card => card.id === id)
-            if (index<0) throw Error(`Card not found.`)
+            if (index<0) throw Error(`card not found`)
             cards.splice(index)
             user.save()
               

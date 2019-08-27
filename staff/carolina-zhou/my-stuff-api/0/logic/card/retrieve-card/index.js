@@ -2,6 +2,7 @@ const validate = require('../../../utils/validate')
 const { User } = require('../../../data')
 
 /**
+ * Retrieves a card by its id and its owner id
  * 
  * @param {*} id 
  * @returns {Promise}

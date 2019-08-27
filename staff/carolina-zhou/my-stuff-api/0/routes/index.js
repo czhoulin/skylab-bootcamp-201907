@@ -24,6 +24,7 @@ const unregisterPropertyOwner = require('./property/unregister-owner')
 
 const registerCard = require('./card/register-card')
 const retrieveCard = require('./card/retrieve-card')
+const retrieveAllCards = require('./card/retrieve-all-cards')
 const unregisterCard = require('./card/unregister-card')
 
 const router = Router()
@@ -55,6 +56,7 @@ router.delete ('/users/:id/properties/:propertyId/owners/:ownerId', [tokenMiddle
 /* CARD */ 
 router.post('/users/:id/cards', [tokenMiddleware, jsonBodyParser], registerCard)
 router.get('/users/:id/cards/:cardId', [tokenMiddleware, jsonBodyParser], retrieveCard)
+router.get('/users/:id/cards/', [tokenMiddleware, jsonBodyParser], retrieveAllCards)
 router.delete ('/users/:id/cards/:cardId', [tokenMiddleware, jsonBodyParser], unregisterCard)
 
 module.exports = router

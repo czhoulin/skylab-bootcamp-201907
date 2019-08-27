@@ -16,9 +16,10 @@ const { Property } = require('../../../data')
 module.exports = function(address, m2, year, cadastre, id) {
 
     validate.string(address, 'address')
-    validate.number(m2, 'm2')
+    validate.number(m2, 'area')
     validate.number(year, 'year')
     validate.string(cadastre, 'cadastre')
+    validate.string(id, 'id')
 
     return Property.findOne({ cadastre })
         .then(response => {
