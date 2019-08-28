@@ -11,7 +11,7 @@ const { Vehicle } = require('../../../data')
 
 module.exports = function(id) {
 
-    validate.string(id, 'vehicle ID')
+    validate.string(id, 'vehicle id')
 
     return (async() => {
         const response = await Vehicle.deleteOne({ _id: id })

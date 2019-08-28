@@ -29,21 +29,40 @@ describe('logic - unregister vehicle', () => {
     it('should succeed on correct data', async () => {
         const result = await logic.unregisterVehicle(id)
         expect(result).not.to.exist
-        const user = await User.findById(id)
-        expect(user).not.to.exist
+        const vehicle = await Vehicle.findById(id)
+        expect(vehicle).not.to.exist
     })
 
-    it('should fail on undefined id', () => 
-        expect(() => 
-               logic.unregisterVehicle(undefined)
-    ).to.throw(`vehicle ID with value undefined is not a string`)
-    )
+    it('should fail on empty id', async () => {
+        id = ' '
 
-    it('should fail on wrong data type', () => 
-        expect(() => 
-               logic.unregisterVehicle(123)
-    ).to.throw(`vehicle ID with value 123 is not a string`)
-    )
+        try{
+            await logic.unregisterVehicle(id, password)
+        } catch({ message }) {
+            expect(message).to.equal('vehicle id is empty or blank')
+        }
+    })
+
+    it('should fail on undefined id', async () => {
+        id = undefined
+
+          try{
+            await logic.unregisterVehicle(id, password)
+        } catch({ message }) {
+            expect(message).to.equal("vehicle id with value undefined is not a string")
+        }
+    })
+     
+    it('should fail on wrong id data type', async() => {
+        id = 123
+
+         try{
+                await logic.unregisterVehicle(id, password)
+            } catch({ message }) {
+                expect(message).to.equal("vehicle id with value 123 is not a string")
+            }
+       
+    })
 
     after(() => mongoose.disconnect())
 })

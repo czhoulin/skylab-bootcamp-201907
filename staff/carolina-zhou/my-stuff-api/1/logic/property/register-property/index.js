@@ -21,12 +21,16 @@ module.exports = function(address, m2, year, cadastre, id) {
     validate.string(cadastre, 'cadastre')
     validate.string(id, 'id')
 
-    return Property.findOne({ cadastre })
-        .then(response => {
-            if (response) throw new Error('property already exists')
-            const property = new Property({ address,m2, year, cadastre })
-            property.owners.push(id)
-            return property.save()
-        })
-        .then(response => response._id.toString())
+    return (async () => {
+        const result = await Property.findOne({ cadastre })
+
+        if (result) throw Error('property already exists')
+
+        const property = new Property({ address,m2, year, cadastre })
+        property.owners.push(id)
+
+        await property.save()
+
+        return property._id.toString()
+    })()
 }    

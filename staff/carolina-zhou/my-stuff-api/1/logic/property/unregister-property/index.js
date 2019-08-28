@@ -11,10 +11,10 @@ const { Property } = require('../../../data')
 
 module.exports = function(id) {
 
-    validate.string(id, 'id')
+    validate.string(id, 'property id')
 
-    return Property.deleteOne({ _id: id })
-        .then(result => {
-            if (!result.deletedCount) throw Error('wrong data provided')
-        })
+    return (async () => {
+        const result = await Property.deleteOne({ _id: id })
+        if (!result.deletedCount) throw Error('wrong data provided')
+    })()
 }

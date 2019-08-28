@@ -9,49 +9,106 @@ describe('logic - register owner', () => {
 
     let address, m2, year, cadastre, propertyId, ownerId
 
-    beforeEach(() => {
-
-        address = `proaddr-${Math.random()}`
+    beforeEach(async() => {
+        address = `address-${Math.random()}`
         m2 = Number((Math.random()*1000).toFixed())
         year = Number((Math.random()*1000).toFixed())
-        cadastre = `cadaddr-${Math.random()}`
+        cadastre = `cadastre-${Math.random()}`
 
-        return Property.deleteMany()
-            .then(() => {
-                name = `name-${Math.random()}`
-                surname = `surname-${Math.random()}`
-                email = `email-${Math.random()}@email.com`
-                password = `123-${Math.random()}`
+        await Property.deleteMany()
+        name = `name-${Math.random()}`
+        surname = `surname-${Math.random()}`
+        email = `email-${Math.random()}@email.com`
+        password = `123-${Math.random()}`
 
-                return User.create({ name, surname, email, password })
-            })
-            .then(user => ownerId = user._id.toString())
-            .then(() => Property.create({address, m2, year, cadastre}))
-            .then(property => propertyId = property.id)
+        const user = await User.create({ name, surname, email, password })
+        ownerId = user._id.toString()
+
+        const property = await Property.create({address, m2, year, cadastre})
+        propertyId = property.id
     })
 
-    it('should succeed on correct data', () =>
-        logic.registerPropertyOwner(propertyId, ownerId)
-            .then(property => {
-                expect(property).to.exist
-                expect(property.id).to.equal(propertyId)
-                expect(property.address).to.equal(address)
-                expect(property.m2).to.equal(m2)
-                expect(property.year).to.equal(year)
-                expect(property.cadastre).to.equal(cadastre)
-            })
-    )
+    it('should succeed on correct data', async () => {
+        const property = await logic.registerPropertyOwner(propertyId, ownerId)
 
-    it('should fail if the property already exists', () =>
-       Property.create({ address, m2, year, cadastre })
-           .then (() => logic.registerPropertyOwner(propertyId, ownerId)
-               .catch( error =>{
-                   expect(error).to.exist
-                   expect(error.message).to.equal(`property already exists`)
-               })
-           )
-    )
+        expect(property).to.exist
+        expect(property.id).to.equal(propertyId)
+        expect(property.address).to.equal(address)
+        expect(property.m2).to.equal(m2)
+        expect(property.year).to.equal(year)
+        expect(property.cadastre).to.equal(cadastre)
+    })
 
+    it('should fail if the property already exists',async () => {
+        try {
+            await logic.registerPropertyOwner(propertyId, ownerId)
+        } catch({error}) {
+            expect(error).to.exist
+            expect(error.message).to.equal(`property already exists`)
+        }
+    })
+
+    // property
+    it('should fail on empty property id', async () => {
+        propertyId = ''
+
+        try {
+            await logic.registerPropertyOwner(propertyId, ownerId)
+        } catch({message}) {
+            expect(message).to.equal('property id is empty or blank')
+        }
+    })
+
+    it('should fail on undefined property id', async () => {
+        propertyId = undefined
+
+        try {
+            await logic.registerPropertyOwner(propertyId, ownerId)
+        } catch({message}) {
+            expect(message).to.equal('property id with value undefined is not a string')
+        }
+    })
+
+    it('should fail on wrong property id data type', async () => {
+        propertyId = 123
+
+        try {
+            await logic.registerPropertyOwner(propertyId, ownerId)
+        } catch({message}) {
+            expect(message).to.equal('property id with value 123 is not a string')
+        }
+    })
+
+    // owner
+    it('should fail on empty owner', async () => {
+        ownerId = ''
+
+        try {
+            await logic.registerPropertyOwner(propertyId, ownerId)
+        } catch({message}) {
+            expect(message).to.equal('owner id is empty or blank')
+        }
+    })
+
+    it('should fail on undefined owner', async () => {
+        ownerId = undefined
+
+        try {
+            await logic.registerPropertyOwner(propertyId, ownerId)
+        } catch({message}) {
+            expect(message).to.equal('owner id with value undefined is not a string')
+        }
+    })
+
+    it('should fail on wrong owner data type', async () => {
+        ownerId = 123
+
+        try {
+            await logic.registerPropertyOwner(propertyId, ownerId)
+        } catch({message}) {
+            expect(message).to.equal('owner id with value 123 is not a string')
+        }
+    })
 
     it('should fail on empty property id', () => 
         expect(() => 

@@ -11,10 +11,12 @@ const { Property } = require('../../../data')
 */
 
 module.exports = function(id, fieldsToUpdate) {
-    validate.string(id, 'id')
+    validate.string(id, 'property id')
+    validate.object(fieldsToUpdate, 'body')
 
-    return Property.findByIdAndUpdate(id, { $set: fieldsToUpdate })
-        .then(property => {
-             if (!property) throw Error(`property with id ${id} does not exist`)
-        })
+    return (async() => {
+        const property = await Property.findByIdAndUpdate(id, { $set: fieldsToUpdate })
+            
+        if (!property) throw new Error(`property with id ${id} does not exist`)
+    })()
 }
