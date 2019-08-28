@@ -11,24 +11,11 @@ const validate = require('../../../utils/validate')
  * @returns {Promise}
  */
 module.exports = function (id, password) {
-    validate.string(id, 'id')
+    validate.string(id, 'user id')
     validate.string(password, 'password')
 
-    // return this.__users__.deleteOne({ _id: ObjectId(id), password })
-    return User.deleteOne({ _id: id, password })
-        .then(result => {
-            if (!result.deletedCount) throw new Error(`wrong credentials`)
-        })
+    return (async () => {
+        const user = await User.deleteOne({ _id: id, password })
+        if (!user.deletedCount) throw new Error(`wrong credentials`)
+    })()
 }
-
-// Alternative function
-/* unregisterUser(id) {
-    validate.string(id, 'id')
-
-    return this.__users__.findOne({ _id: ObjectId(id) }, { projection: { _id: 0, password: 0 } })
-        .then(user => {
-            if (!user) throw new Error(`user does not exist`)
-
-            return this.__users__.deleteOne({ _id: ObjectId(id) })
-        })
-} */

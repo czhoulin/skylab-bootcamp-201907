@@ -14,16 +14,14 @@ const validate = require('../../../utils/validate')
 module.exports = function (name, surname, email, password) {
     validate.string(name, 'name')
     validate.string(surname, 'surname')
-    validate.string(email, 'email')
+    validate.string(email, 'e-mail')
     validate.string(password, 'password')
 
-    // this.__users__.findOne() --> User.findOne()
-    return User.findOne({ email })
-        .then(user => {
-            if (user) throw new Error(`user with e-mail ${email} already exists`)
+    return (async () => {
+        const user = await User.findOne({ email })
 
-            // this.__users__.insertOne() --> User.create()
-            return User.create({ name, surname, email, password })
-        })
-        .then(() => { })
+        if (user) throw new Error(`user with e-mail ${email} already exists`)
+
+        return User.create({ name, surname, email, password })
+    })()
 }

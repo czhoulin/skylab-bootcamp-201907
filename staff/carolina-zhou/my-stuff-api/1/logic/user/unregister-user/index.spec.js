@@ -1,104 +1,117 @@
 const { expect } = require('chai')
 const logic = require('../../')
-// const data = require('../../data')
-// const { ObjectId } = require('mongodb')
-// Add:
 const { User } = require('../../../data')
 const mongoose = require('mongoose')
 
 describe('logic - unregister user', () => {
-    /* let client, users
-    before(() => {
-        return data('mongodb://localhost', 'my-api-test')
-            .then(({ client: _client, db }) => {
-                client = _client
-
-                users = db.collection('users')
-
-                logic.__users__ = users
-            })
-    }) */
 
     before(() => mongoose.connect('mongodb://localhost/my-api-test', { useNewUrlParser: true }))
 
     let name, surname, email, password, id
 
-    beforeEach(() => {
+    beforeEach(async() => {
         name = `name-${Math.random()}`
         surname = `surname-${Math.random()}`
         email = `email-${Math.random()}@domain.com`
         password = `password-${Math.random()}`
 
-        // users --> User
-        return User.deleteMany()
-            // this.__users__.insertOne() --> User.create()
-            .then(() => User.create({ name, surname, email, password }))
-            //.then(result => id = result.insertedId.toString())
-            .then(user => id = user.id)
+        await User.deleteMany()
+        const user = await User.create({ name, surname, email, password })
+        id = user.id
     })
 
-    it('should succeed on correct data', () =>
-        logic.unregisterUser(id, password)
-            .then(result => {
-                expect(result).not.to.exist
+    it('should succeed on correct data', async () => {
+        const result = await logic.unregisterUser(id, password)
+        expect(result).not.to.exist
+        const user = await User.findById(id)
+        expect(user).not.to.exist
+    })
 
-                // return users.findOne({ _id: ObjectId(id) })
-                return User.findById(id)
-            })
-            .then(user => {
-                expect(user).not.to.exist
-            })
-    )
+    it('should fail on unexisting user', async () => {
+        id =  '5d5d5530531d455f75da9fF9'
 
-    it('should fail on unexisting user', () =>
-        logic.unregisterUser('5d5d5530531d455f75da9fF9', password)
-            .then(() => { throw Error('should not reach this point') })
-            .catch(({ message }) => expect(message).to.equal('wrong credentials'))
-    )
+        try {
+            await logic.unregisterUser(id, password)
+            
+            throw new Error('should not reach this point')
+        } catch({message}) {
+            expect(message).to.equal('wrong credentials')
+        }
+    })
 
-    it('should fail on existing user, but wrong password', () =>
-        logic.unregisterUser(id, 'wrong-password')
-            .then(() => { throw Error('should not reach this point') })
-            .catch(({ message }) => expect(message).to.equal('wrong credentials'))
-    )
+    it('should fail on wrong password', async () => {
+        password = 'wrong password'
 
-    it('should fail on empty id', () => 
-        expect(() => 
-               logic.unregisterUser('', password)
-    ).to.throw('id is empty or blank')
-    )
+        try {
+            await logic.unregisterUser(id, password)
 
-     it('should fail on undefined id', () => 
-        expect(() => 
-               logic.unregisterUser(undefined, password)
-    ).to.throw(`id with value undefined is not a string`)
-    )
+            throw new Error('should not reach this point')
+        } catch({message}) {
+            expect(message).to.equal('wrong credentials')
+        }
+    })
 
-     it('should fail on wrong id data type', () => 
-        expect(() => 
-               logic.unregisterUser(123, password)
-    ).to.throw(`id with value 123 is not a string`)
-    )
+    it('should fail on empty id', async () => {
+        id = ' '
 
-    it('should fail on empty password', () => 
-        expect(() => 
-               logic.unregisterUser(id, '')
-    ).to.throw('password is empty or blank')
-    )
+        try{
+            await logic.unregisterUser(id, password)
+        } catch({ message }) {
+            expect(message).to.equal('user id is empty or blank')
+        }
+    })
 
-     it('should fail on undefined password', () => 
-        expect(() => 
-               logic.unregisterUser(id, undefined)
-    ).to.throw(`password with value undefined is not a string`)
-    )
+    it('should fail on undefined id', async () => {
+        id = undefined
 
-     it('should fail on wrong password data type', () => 
-        expect(() => 
-               logic.unregisterUser(id, 123)
-    ).to.throw(`password with value 123 is not a string`)
-    )
+          try{
+            await logic.unregisterUser(id, password)
+        } catch({ message }) {
+            expect(message).to.equal("user id with value undefined is not a string")
+        }
+    })
+     
+    it('should fail on wrong id data type', async() => {
+        id = 123
 
+         try{
+                await logic.unregisterUser(id, password)
+            } catch({ message }) {
+                expect(message).to.equal("user id with value 123 is not a string")
+            }
+       
+    })
 
-    // after(() => client.close())
+    it('should fail on empty password', async () => {
+        password = ' '
+
+        try{
+            await logic.unregisterUser(id, password)
+        } catch({ message }) {
+            expect(message).to.equal('password is empty or blank')
+        }
+    })
+
+    it('should fail on undefined password', async () => {
+        password = undefined
+
+          try{
+            await logic.unregisterUser(id, password)
+        } catch({ message }) {
+            expect(message).to.equal("password with value undefined is not a string")
+        }
+    })
+     
+    it('should fail on wrong password data type', async() => {
+        password = 123
+
+         try{
+            await logic.unregisterUser(id, password)
+        } catch({ message }) {
+             expect(message).to.equal("password with value 123 is not a string")
+        }
+       
+    })
+
     after(() => mongoose.disconnect())
 })

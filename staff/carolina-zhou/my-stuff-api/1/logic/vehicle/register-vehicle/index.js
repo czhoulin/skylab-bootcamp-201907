@@ -26,36 +26,26 @@ module.exports = function (brand, model, year, type, color, electric, plate, id)
     validate.string(plate, 'plate')
     validate.string(id, 'id')
 
-/*     // this.__users__.findOne() --> User.findOne()
-    return Vehicle.findOne({ plate })
-        .then(vehicle => {
-            if (vehicle) throw new Error(`vehicle with plate ${plate} already exists`)
+    return (async() => {
+        const response = await Vehicle.findOne({ plate })
+        if (response) throw new Error('vehicle already exists')
 
-            // this.__users__.insertOne() --> User.create()
-            return Vehicle.create({ brand, model, year, type, color, electric, plate, owner })
+        const vehicle = new Vehicle({
+            brand, 
+            model,
+            year,
+            type,
+            color,
+            electric,
+            plate 
         })
-        .then(() => { }) */
+        vehicle.owner = id
+        await vehicle.save() 
 
-        return Vehicle.findOne({ plate })
-            .then(response => {
-                if (response) throw new Error('vehicle already exists')
-                const vehicle = new Vehicle({
-                    brand, 
-                    model,
-                    year,
-                    type,
-                    color,
-                    electric,
-                    plate 
-                })
-                vehicle.owner = id
-                return vehicle.save()
-                // save() method to assign vehicle to owner by saving it in the database
-            })
-            .then(() => Vehicle.findOne({ plate })
-            ).then(response => {
-                if (!response) throw new Error(`vehicle with plate ${plate} does not exist`)
-                vehicleId = response._id.toString()
-                return vehicleId
-            })
+        const newVehicle = await Vehicle.findOne({ plate })
+        if (!newVehicle) throw new Error(`vehicle with plate ${plate} does not exist`)
+
+        vehicleId = newVehicle._id.toString()
+        return vehicleId
+    })()
 }

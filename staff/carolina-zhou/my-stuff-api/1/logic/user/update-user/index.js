@@ -1,6 +1,5 @@
 const validate = require('../../../utils/validate')
-// const { ObjectId } = require('mongodb')
-/*Add:*/ const { User } = require('../../../data')
+const { User } = require('../../../data')
 
 /**
  * Updates a user.
@@ -11,18 +10,13 @@ const validate = require('../../../utils/validate')
  * @returns {Promise}
  */
 module.exports = function (id, data) {
-    validate.string(id, 'id')
+    validate.string(id, 'user id')
     validate.object(data, 'body')
 
-    // Inadequate solution
-    /* return this.__users__.updateOne({ _id: ObjectId(id) }, { $set: data })
-        .then(result => {
-            if (!result.result.nModified) throw new Error(`user with id ${id} does not exist`)
-        }) */
-        return User.findByIdAndUpdate(id, { $set: data })
-        .then(user => {
-            if (!user) throw new Error(`user with id ${id} does not exist`)
-        })
+    return (async() => {
+        const user = await User.findByIdAndUpdate(id, { $set: data })
+        if (!user) throw new Error(`user with id ${id} does not exist`)
+    })()
 }
 
 // Alternative function

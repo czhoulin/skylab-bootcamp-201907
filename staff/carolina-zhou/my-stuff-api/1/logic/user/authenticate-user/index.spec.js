@@ -51,6 +51,68 @@ describe('logic - authenticate user', () => {
         }
     })
 
+    // email
+    it('should fail on empty email', async () => {
+        email = ''
+
+        try {
+            await logic.authenticateUser(email, password)
+        } catch({message}) {
+            expect(message).to.equal('e-mail is empty or blank')
+        }
+    })
+
+    it('should fail on undefined email', async () => {
+        email = undefined
+
+        try {
+            await logic.authenticateUser(email, password)
+        } catch({message}) {
+            expect(message).to.equal('e-mail with value undefined is not a string')
+        }
+    })
+
+    it('should fail on wrong email data type', async () => {
+        email = 123
+
+        try {
+            await logic.authenticateUser(email, password)
+        } catch({message}) {
+            expect(message).to.equal('e-mail with value 123 is not a string')
+        }
+    })
+
+    // password
+    it('should fail on empty password', async () => {
+        password = ''
+
+        try {
+            await logic.authenticateUser(email, password)
+        } catch({message}) {
+            expect(message).to.equal('password is empty or blank')
+        }
+    })
+
+    it('should fail on undefined password', async () => {
+        password = undefined
+
+        try {
+            await logic.authenticateUser(email, password)
+        } catch({message}) {
+            expect(message).to.equal('password with value undefined is not a string')
+        }
+    })
+
+    it('should fail on wrong password data type', async () => {
+        password = 123
+
+        try {
+            await logic.authenticateUser(email, password)
+        } catch({message}) {
+            expect(message).to.equal('password with value 123 is not a string')
+        }
+    })
+
 /*      it('should fail on undefined email', () => 
         expect(() => 
                logic.authenticateUser(undefined, password)

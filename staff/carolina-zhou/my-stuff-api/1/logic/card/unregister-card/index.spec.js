@@ -26,7 +26,6 @@ describe('logic - unregister card', () => {
         user.cards.push(card)
 
         await user.save()
-        // return user.save() => it also works... why?
     })
 
     it("should succeed on correct data" , async () =>{

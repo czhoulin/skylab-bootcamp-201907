@@ -1,23 +1,9 @@
 const { expect } = require('chai')
 const logic = require('../../')
-// const data = require('../../data')
-// Add:
 const { User } = require('../../../data')
 const mongoose = require('mongoose')
 
 describe('logic - register user', () => {
-    /* let client, users
-    before(() => {
-        return data('mongodb://localhost', 'my-api-test')
-            .then(({ client: _client, db }) => {
-                client = _client
-
-                users = db.collection('users')
-
-                logic.__users__ = users
-            })
-    }) */
-
     before(() => mongoose.connect('mongodb://localhost/my-api-test', { useNewUrlParser: true }))
 
     let name, surname, email, password
@@ -28,97 +14,144 @@ describe('logic - register user', () => {
         email = `email-${Math.random()}@domain.com`
         password = `password-${Math.random()}`
 
-        // users --> User
         return User.deleteMany()
     })
 
-    it('should succeed on correct data', () =>
-        logic.registerUser(name, surname, email, password)
-            .then(result => {
-                expect(result).not.to.exist
+    it('should succeed on correct data', async () => {
+        const result = await logic.registerUser(name, surname, email, password)
 
-                // users --> User
-                return User.findOne({ email })
-            })
-            .then(user => {
-                expect(user).to.exist
-                expect(user.name).to.equal(name)
-                expect(user.surname).to.equal(surname)
-                expect(user.email).to.equal(email)
-                expect(user.password).to.equal(password)
-            })
-    )
+        const user = await User.findOne({ email })
+        expect(user).to.exist
+        expect(user.name).to.equal(name)
+        expect(user.surname).to.equal(surname)
+        expect(user.email).to.equal(email)
+        expect(user.password).to.equal(password)
+        
+    })
 
     // name
-    it('should fail on empty name', () => 
-        expect(() => 
-               logic.registerUser('', surname, email, password)
-    ).to.throw('name is empty or blank')
-    )
+    it('should fail on empty name', async () => {
+        name = ''
 
-     it('should fail on undefined name', () => 
-        expect(() => 
-               logic.registerUser(undefined, surname, email, password)
-    ).to.throw(`name with value undefined is not a string`)
-    )
+        try {
+            await logic.registerUser(name, surname, email, password)
+        } catch({message}) {
+            expect(message).to.equal('name is empty or blank')
+        }
+    })
 
-     it('should fail on wrong password data name', () => 
-        expect(() => 
-               logic.registerUser(123, surname, email, password)
-    ).to.throw(`name with value 123 is not a string`)
-    )
+    it('should fail on undefined name', async () => {
+        name = undefined
+
+        try {
+            await logic.registerUser(name, surname, email, password)
+        } catch({message}) {
+            expect(message).to.equal('name with value undefined is not a string')
+        }
+    })
+
+    it('should fail on wrong name data type', async () => {
+        name = 123
+
+        try {
+            await logic.registerUser(name, surname, email, password)
+        } catch({message}) {
+            expect(message).to.equal('name with value 123 is not a string')
+        }
+    })
 
     // surname
-    it('should fail on empty surname', () => 
-        expect(() => 
-               logic.registerUser(name, '', email, password)
-    ).to.throw('surname is empty or blank')
-    )
+    it('should fail on empty surname', async () => {
+        surname = ''
 
-     it('should fail on undefined surname', () => 
-        expect(() => 
-               logic.registerUser(name, undefined, email, password)
-    ).to.throw(`surname with value undefined is not a string`)
-    )
+        try {
+            await logic.registerUser(name, surname, email, password)
+        } catch({message}) {
+            expect(message).to.equal('surname is empty or blank')
+        }
+    })
 
-     it('should fail on wrong password data surname', () => 
-        expect(() => 
-               logic.registerUser(name, 123, email, password)
-    ).to.throw(`surname with value 123 is not a string`)
-    )
+    it('should fail on undefined surname', async () => {
+        surname = undefined
+
+        try {
+            await logic.registerUser(name, surname, email, password)
+        } catch({message}) {
+            expect(message).to.equal('surname with value undefined is not a string')
+        }
+    })
+
+    it('should fail on wrong surname data type', async () => {
+        surname = 123
+
+        try {
+            await logic.registerUser(name, surname, email, password)
+        } catch({message}) {
+            expect(message).to.equal('surname with value 123 is not a string')
+        }
+    })
 
     // email
-     it('should fail on undefined email', () => 
-        expect(() => 
-               logic.registerUser(name, surname, undefined, password)
-    ).to.throw(`email with value undefined is not a string`)
-    )
+    it('should fail on empty email', async () => {
+        email = ''
 
-     it('should fail on wrong email data type', () => 
-        expect(() => 
-               logic.registerUser(name, surname, 123, password)
-    ).to.throw(`email with value 123 is not a string`)
-    )
+        try {
+            await logic.registerUser(name, surname, email, password)
+        } catch({message}) {
+            expect(message).to.equal('e-mail is empty or blank')
+        }
+    })
+
+    it('should fail on undefined email', async () => {
+        email = undefined
+
+        try {
+            await logic.registerUser(name, surname, email, password)
+        } catch({message}) {
+            expect(message).to.equal('e-mail with value undefined is not a string')
+        }
+    })
+
+    it('should fail on wrong email data type', async () => {
+        email = 123
+
+        try {
+            await logic.registerUser(name, surname, email, password)
+        } catch({message}) {
+            expect(message).to.equal('e-mail with value 123 is not a string')
+        }
+    })
 
     // password
-    it('should fail on empty password', () => 
-        expect(() => 
-               logic.registerUser(name, surname, email, '')
-    ).to.throw('password is empty or blank')
-    )
+    it('should fail on empty password', async () => {
+        password = ''
 
-     it('should fail on undefined password', () => 
-        expect(() => 
-               logic.registerUser(name, surname, email, undefined)
-    ).to.throw(`password with value undefined is not a string`)
-    )
+        try {
+            await logic.registerUser(name, surname, email, password)
+        } catch({message}) {
+            expect(message).to.equal('password is empty or blank')
+        }
+    })
 
-     it('should fail on wrong password data type', () => 
-        expect(() => 
-               logic.registerUser(name, surname, email, 123)
-    ).to.throw(`password with value 123 is not a string`)
-    )
+    it('should fail on undefined password', async () => {
+        password = undefined
 
-    // after(() => client.close())
+        try {
+            await logic.registerUser(name, surname, email, password)
+        } catch({message}) {
+            expect(message).to.equal('password with value undefined is not a string')
+        }
+    })
+
+    it('should fail on wrong password data type', async () => {
+        password = 123
+
+        try {
+            await logic.registerUser(name, surname, email, password)
+        } catch({message}) {
+            expect(message).to.equal('password with value 123 is not a string')
+        }
+    })
+
     after(() => mongoose.disconnect())
 })
