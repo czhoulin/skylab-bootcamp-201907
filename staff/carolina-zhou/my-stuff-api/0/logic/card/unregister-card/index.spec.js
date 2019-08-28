@@ -7,12 +7,12 @@ describe('logic - unregister card', () => {
 
     before(() => mongoose.connect('mongodb://localhost/my-api-test',  { useNewUrlParser: true }))
 
-    let cardId, number, expiry, userId
+    let cardId, number, expiration, userId
 
     beforeEach(() => {
         
         number = `num-${Math.random()}`
-        expiry = new Date()
+        expiration = new Date()
 
         return User.deleteMany()
             .then(() => {
@@ -22,7 +22,7 @@ describe('logic - unregister card', () => {
                 password = `123-${Math.random()}`
                 return User.create({ name, surname, email, password })
                 .then(user => {
-                    const newCard = new Card({ number, expiry })
+                    const newCard = new Card({ number, expiration })
                     userId = user.id
                     cardId = newCard.id
                     user.cards.push(newCard)
@@ -36,7 +36,7 @@ describe('logic - unregister card', () => {
             .then(card => {
                 expect(card).not.to.exist
                 /* expect(card.number).not.to.exist
-                expect(card.expiry).not.to.exist */
+                expect(card.expiration).not.to.exist */
             })
     )
 

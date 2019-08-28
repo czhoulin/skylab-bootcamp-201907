@@ -7,12 +7,12 @@ describe('logic - retrieve card', () => {
 
     before(() => mongoose.connect('mongodb://localhost/my-api-test', { useNewUrlParser: true }))
 
-    let cardId, number, expiry, userId
+    let cardId, number, expiration, userId
 
     beforeEach(() => {
 
         number = `num-${Math.random()}`
-        expiry = new Date()
+        expiration = new Date()
 
         return User.deleteMany()
             .then(() => {
@@ -22,7 +22,7 @@ describe('logic - retrieve card', () => {
                 password = `123-${Math.random()}`
                 return User.create({ name, surname, email, password })
                 .then(user => {
-                    const newCard = new Card({ number, expiry })
+                    const newCard = new Card({ number, expiration })
                     userId = user.id
                     cardId = newCard.id
                     user.cards.push(newCard)
@@ -37,7 +37,7 @@ describe('logic - retrieve card', () => {
                 expect(card).to.exist
                 expect(card._id.toString()).to.equal(cardId)
                 expect(card.number).to.equal(number)
-                expect(card.expiry).to.deep.equal(expiry)
+                expect(card.expiration).to.deep.equal(expiration)
             })
     )
 

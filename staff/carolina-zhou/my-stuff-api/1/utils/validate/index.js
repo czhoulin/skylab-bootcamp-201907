@@ -1,6 +1,5 @@
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 const URL_REGEX = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/ 
-const DATE_REGEX = /[0-1]{1}[0-9]{1}[\/][0-9]{2}/
 
 module.exports = {
 
@@ -20,7 +19,8 @@ module.exports = {
         },
 
         date(target, name) {
-            if (!DATE_REGEX.test(target)) throw new Error(`${name} with value ${target} is not a valid date`)
+            if (!(target instanceof Date) && target !== '') throw TypeError(`${name} date with value ${target} is not a date`)
+            if (target === '') throw new Error(`${name} is empty or blank`)
         },
 
         email(target, name) {

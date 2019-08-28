@@ -2,7 +2,7 @@ const validate = require('../../../utils/validate')
 const { User, Card } = require('../../../data')
 
 /**
- * Unregisters a user by their id
+ * Unregisters a card
  * 
  * @param {string} id 
  * 

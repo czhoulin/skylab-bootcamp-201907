@@ -16,11 +16,11 @@ describe('logic - retrieve all cards', () => {
         password = `123-${Math.random()}`
         
         number = `num-${Math.random()}`
-        expiry = new Date()
+        expiration = new Date()
 
         await User.deleteMany()
         const user = await User.create({ name, surname, email, password })
-        const newCard = new Card({ number, expiry })
+        const newCard = new Card({ number, expiration })
         userId = user.id
         cardId = newCard.id
         user.cards.push(newCard)
@@ -34,24 +34,35 @@ describe('logic - retrieve all cards', () => {
         expect(cards.length).to.equal(1)
     })
 
-    // owner
-    it('should fail on empty owner', () => 
-        expect(() => 
-               logic.retrieveAllCards('')
-    ).to.throw('owner is empty or blank')
-    )
+    it('should fail on empty owner', async () => {
+        userId = ''
 
-     it('should fail on undefined owner', () => 
-        expect(() => 
-               logic.retrieveAllCards(undefined)
-    ).to.throw(`owner with value undefined is not a string`)
-    )
+        try {
+            await logic.retrieveAllCards(userId)
+        } catch({message}) {
+            expect(message).to.equal('owner is empty or blank')
+        }
+    })
 
-     it('should fail on wrong owner data type', () => 
-        expect(() => 
-               logic.retrieveAllCards(123)
-    ).to.throw(`owner with value 123 is not a string`)
-    )
+    it('should fail on undefined owner', async () => {
+        userId = undefined
+
+        try {
+            await logic.retrieveAllCards(userId)
+        } catch({message}) {
+            expect(message).to.equal('owner with value undefined is not a string')
+        }
+    })
+
+    it('should fail on wrong owner data type', async () => {
+        userId = 123
+
+        try {
+            await logic.retrieveAllCards(userId)
+        } catch({message}) {
+            expect(message).to.equal('owner with value 123 is not a string')
+        }
+    })
 
     after(() => mongoose.disconnect())
 })

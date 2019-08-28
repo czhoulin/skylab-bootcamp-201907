@@ -7,82 +7,73 @@ describe('logic - unregister card', () => {
 
     before(() => mongoose.connect('mongodb://localhost/my-api-test',  { useNewUrlParser: true }))
 
-    let cardId, number, expiry, userId
+    let name , surname , email , password , number , expiration , userId , cardId
 
-    beforeEach(() => {
-        
-        number = `num-${Math.random()}`
-        expiry = new Date()
+    beforeEach( async () => {
+        name = `name-${Math.random()}`
+        surname = `surname-${Math.random()}`
+        email = `email-${Math.random()}@mail.com`
+        password = `password-${Math.random()}`
+        number = Math.random()
+        expiration = new Date()
 
-        return User.deleteMany()
-            .then(() => {
-                name = `name-${Math.random()}`
-                surname = `surname-${Math.random()}`
-                email = `email-${Math.random()}@email.com`
-                password = `123-${Math.random()}`
-                return User.create({ name, surname, email, password })
-                .then(user => {
-                    const newCard = new Card({ number, expiry })
-                    userId = user.id
-                    cardId = newCard.id
-                    user.cards.push(newCard)
-                    return user.save()
-                })
-            })
+        await User.deleteMany()
+
+        const user = await User.create({ name , surname , email , password })
+        userId = user.id
+        const card = await new Card({ userId , number , expiration })
+        cardId = card.id
+        user.cards.push(card)
+
+        await user.save()
+        // return user.save() => it also works... why?
     })
 
-    it('should succeed on correct data', () =>
-        logic.unregisterCard(cardId, userId)
-            .then(card => {
-                expect(card).not.to.exist
-                /* expect(card.number).not.to.exist
-                expect(card.expiry).not.to.exist */
-            })
+    it("should succeed on correct data" , async () =>{
+        const result = await logic.unregisterCard(userId , cardId)
+        expect(result).not.to.exist
+    })
+
+    it("should fail on unexisting user" , async () => {
+        try{
+            await logic.unregisterCard('5d5d5530531d455f75da9fF9' , cardId)
+        } catch({ message }){
+            expect(message).to.equal('user with id 5d5d5530531d455f75da9fF9 does not exist')
+        }
+    })
+
+    it("should fail on unexisting card" , async () => {
+        try{
+            await logic.unregisterCard(userId , '5d5d5530531d455f75da9fF9')
+        } catch({ message }){
+            expect(message).to.equal('card with id 5d5d5530531d455f75da9fF9 does not exist')
+        }
+    })
+
+    // user id
+    it('should fail on empty user id', () => 
+        expect(() => logic.unregisterCard("" , cardId)).to.throw('user id is empty or blank')
     )
 
-    it('should fail on unexisting card', () =>
-        logic.unregisterCard('5d5d5530531d455f75da9fF9', userId)
-            .then(() => { throw Error('should not reach this point') })
-            .catch(({ message }) => expect(message).to.equal('card not found'))
+    it('should fail on undefined user id', () => 
+        expect(() => logic.unregisterCard(undefined , cardId)).to.throw('user id with value undefined is not a string')
+    )
+    
+    it('should fail on wrong user id type', () => 
+        expect(() => logic.unregisterCard(123 , cardId)).to.throw('user id with value 123 is not a string')
+    )
+    
+    // card id
+    it('should fail on empty card id', () => 
+        expect(() => logic.unregisterCard(userId , "")).to.throw('card id is empty or blank')
     )
 
-    // ID
-    it('should fail on empty id', () => 
-        expect(() => 
-               logic.unregisterCard('', userId)
-    ).to.throw('id is empty or blank')
+    it('should fail on undefined card id', () => 
+        expect(() => logic.unregisterCard(userId , undefined)).to.throw('card id with value undefined is not a string')
     )
-
-     it('should fail on undefined id', () => 
-        expect(() => 
-               logic.unregisterCard(undefined, userId)
-    ).to.throw(`id with value undefined is not a string`)
+    
+    it('should fail on wrong card id type', () => 
+        expect(() => logic.unregisterCard(userId , 123)).to.throw('card id with value 123 is not a string')
     )
-
-     it('should fail on wrong id data type', () => 
-        expect(() => 
-               logic.unregisterCard(123, userId)
-    ).to.throw(`id with value 123 is not a string`)
-    )
-
-    // owner
-    it('should fail on empty owner', () => 
-        expect(() => 
-               logic.unregisterCard(cardId, '')
-    ).to.throw('owner is empty or blank')
-    )
-
-     it('should fail on undefined owner', () => 
-        expect(() => 
-               logic.unregisterCard(cardId, undefined)
-    ).to.throw(`owner with value undefined is not a string`)
-    )
-
-     it('should fail on wrong owner data type', () => 
-        expect(() => 
-               logic.unregisterCard(cardId, 123)
-    ).to.throw(`owner with value 123 is not a string`)
-    )
-
     after(() => mongoose.disconnect())
 })

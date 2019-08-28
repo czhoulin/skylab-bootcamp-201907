@@ -6,7 +6,7 @@ const { User, Card } = require('../../../data')
 describe('logic - register card', () => {
     before(() => mongoose.connect('mongodb://localhost/my-api-test', { useNewUrlParser: true }))
 
-    let name, surname, email, password, id, _number, expiry
+    let name, surname, email, password, id, _number, expiration
 
     beforeEach(() => {
         name = `name-${Math.random()}`
@@ -16,7 +16,7 @@ describe('logic - register card', () => {
 
         _number = `555-${Math.random()}`
 
-        expiry = new Date
+        expiration = new Date
 
         return User.deleteMany()
             .then(() => User.create({ name, surname, email, password }))
@@ -24,7 +24,7 @@ describe('logic - register card', () => {
     })
 
     it('should succeed on correct data', () =>
-        logic.registerCard(id, _number, expiry)
+        logic.registerCard(id, _number, expiration)
             .then(_id => {
                 cardId = _id
 
@@ -41,7 +41,7 @@ describe('logic - register card', () => {
 
                 expect(card).to.exist
                 expect(card.number).to.equal(_number)
-                expect(card.expiry).to.deep.equal(expiry)
+                expect(card.expiration).to.deep.equal(expiration)
             })
     )
 
@@ -75,7 +75,7 @@ describe('logic - register card', () => {
 
 //     before(() => mongoose.connect('mongodb://localhost/my-api-test', { useNewUrlParser: true }))
     
-//     let number, expiry, id, _user
+//     let number, expiration, id, _user
 //     let name, surname, email, password
 
 //     beforeEach(() => {
@@ -86,7 +86,7 @@ describe('logic - register card', () => {
 //         password = `123-${Math.random()}`
 // ​
 //         number = `555-${Math.random()}`
-//         expiry = '09/19'
+//         expiration = '09/19'
 // ​
 //         return User.deleteMany()
 //         .then(() => User.create({ name, surname, email, password }))
@@ -98,7 +98,7 @@ describe('logic - register card', () => {
 
 //     it('should succeed on correct data', () => {
 //         let _cardId
-//         logic.registerCard(id, number, expiry)
+//         logic.registerCard(id, number, expiration)
 //             .then(cardId => {
 //                 expect(cardId).to.exist
 //                 _cardId = cardId
@@ -111,9 +111,9 @@ describe('logic - register card', () => {
 //         })
 // ​
 //     it('should fail if the card already exists', () => {
-//         _user.cards.push(new Card({ number, expiry }))
+//         _user.cards.push(new Card({ number, expiration }))
 //         _user.save()
-//         .then(() => logic.registerCard(id, number, expiry))
+//         .then(() => logic.registerCard(id, number, expiration))
 //         .catch( error =>{
 //                 expect(error).to.exist
 //                 expect(error.message).to.equal(`card already exists.`)
@@ -123,39 +123,39 @@ describe('logic - register card', () => {
 //     /* Number */
 //     it('should fail on empty card number', () => 
 //         expect(() => 
-//                logic.registerCard(id, '', expiry)
+//                logic.registerCard(id, '', expiration)
 //     ).to.throw('card number is empty or blank')
 //     )
 // ​
 //      it('should fail on undefined card number', () => 
 //         expect(() => 
-//                logic.registerCard(id, undefined, expiry)
+//                logic.registerCard(id, undefined, expiration)
 //     ).to.throw(`card number with value undefined is not a string`)
 //     )
 // ​
 //      it('should fail on wrong data type for card number', () => 
 //         expect(() => 
-//                logic.registerCard(id, 123, expiry)
+//                logic.registerCard(id, 123, expiration)
 //     ).to.throw(`card number with value 123 is not a string`)
 //     )
 // ​
-//     /* Expiry */
-//     it('should fail on empty expiry date', () => 
+//     /* expiration */
+//     it('should fail on empty expiration date', () => 
 //         expect(() => 
 //                logic.registerCard(id, number, '')
-//     ).to.throw('expiry date is empty or blank')
+//     ).to.throw('expiration date is empty or blank')
 //     )
 // ​
-//      it('should fail on undefined expiry date', () => 
+//      it('should fail on undefined expiration date', () => 
 //         expect(() => 
 //                logic.registerCard(id, number, undefined)
-//     ).to.throw(`expiry date with value undefined is not a valid date`)
+//     ).to.throw(`expiration date with value undefined is not a valid date`)
 //     )
 // ​
-//      it('should fail on wrong data type for expiry date', () => 
+//      it('should fail on wrong data type for expiration date', () => 
 //         expect(() => 
 //                logic.registerCard(id, number, 123)
-//     ).to.throw(`expiry date with value 123 is not a valid date`)
+//     ).to.throw(`expiration date with value 123 is not a valid date`)
 //     )
 
 //     after(() => mongoose.disconnect())

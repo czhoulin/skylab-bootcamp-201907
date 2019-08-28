@@ -12,7 +12,7 @@ describe('logic - retrieve all cards', () => {
     beforeEach(() => {
 
         number = `num-${Math.random()}`
-        expiry = new Date()
+        expiration = new Date()
 
         return User.deleteMany()
             .then(() => {
@@ -22,7 +22,7 @@ describe('logic - retrieve all cards', () => {
                 password = `123-${Math.random()}`
                 return User.create({ name, surname, email, password })
                 .then(user => {
-                    const newCard = new Card({ number, expiry })
+                    const newCard = new Card({ number, expiration })
                     userId = user.id
                     cardId = newCard.id
                     user.cards.push(newCard)

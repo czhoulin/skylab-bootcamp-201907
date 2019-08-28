@@ -7,7 +7,7 @@ describe('logic - retrieve card', () => {
 
     before(() => mongoose.connect('mongodb://localhost/my-api-test', { useNewUrlParser: true }))
 
-    let cardId, number, expiry, userId
+    let cardId, number, expiration, userId
 
     beforeEach(async() => {
         name = `name-${Math.random()}`
@@ -16,11 +16,11 @@ describe('logic - retrieve card', () => {
         password = `123-${Math.random()}`
 
         number = `num-${Math.random()}`
-        expiry = new Date()
+        expiration = new Date()
 
         await User.deleteMany()
         const user = await User.create({ name, surname, email, password })
-        const newCard = new Card({ number, expiry })
+        const newCard = new Card({ number, expiration })
         userId = user.id
         cardId = newCard.id
         user.cards.push(newCard)
@@ -32,7 +32,7 @@ describe('logic - retrieve card', () => {
         expect(card).to.exist
         expect(card._id.toString()).to.equal(cardId)
         expect(card.number).to.equal(number)
-        expect(card.expiry).to.deep.equal(expiry)
+        expect(card.expiration).to.deep.equal(expiration)
     })
 
     it('should fail if the id is not a string', () =>
@@ -40,42 +40,66 @@ describe('logic - retrieve card', () => {
     )
 
     // ID
-    it('should fail on empty id', () => 
-        expect(() => 
-               logic.retrieveCard('', userId)
-    ).to.throw('id is empty or blank')
-    )
+    it('should fail on empty id', async () => {
+        cardId = ''
 
-     it('should fail on undefined id', () => 
-        expect(() => 
-               logic.retrieveCard(undefined, userId)
-    ).to.throw(`id with value undefined is not a string`)
-    )
+        try {
+            await logic.retrieveCard(cardId, userId)
+        } catch({message}) {
+            expect(message).to.equal('id is empty or blank')
+        }
+    })
 
-     it('should fail on wrong id data type', () => 
-        expect(() => 
-               logic.retrieveCard(123, userId)
-    ).to.throw(`id with value 123 is not a string`)
-    )
+    it('should fail on undefined id', async () => {
+        cardId = undefined
+
+        try {
+            await logic.retrieveCard(cardId, userId)
+        } catch({message}) {
+            expect(message).to.equal('id with value undefined is not a string')
+        }
+    })
+
+    it('should fail on wrong id data type', async () => {
+        cardId = 123
+
+        try {
+            await logic.retrieveCard(cardId, userId)
+        } catch({message}) {
+            expect(message).to.equal('id with value 123 is not a string')
+        }
+    })
 
     // owner
-    it('should fail on empty owner', () => 
-        expect(() => 
-               logic.retrieveCard(cardId, '')
-    ).to.throw('owner is empty or blank')
-    )
+    it('should fail on empty owner', async () => {
+        userId = ''
 
-     it('should fail on undefined owner', () => 
-        expect(() => 
-               logic.retrieveCard(cardId, undefined)
-    ).to.throw(`owner with value undefined is not a string`)
-    )
+        try {
+            await logic.retrieveCard(cardId, userId)
+        } catch({message}) {
+            expect(message).to.equal('owner is empty or blank')
+        }
+    })
 
-     it('should fail on wrong owner data type', () => 
-        expect(() => 
-               logic.retrieveCard(cardId, 123)
-    ).to.throw(`owner with value 123 is not a string`)
-    )
+    it('should fail on undefined owner', async () => {
+        userId = undefined
+
+        try {
+            await logic.retrieveCard(cardId, userId)
+        } catch({message}) {
+            expect(message).to.equal('owner with value undefined is not a string')
+        }
+    })
+
+    it('should fail on wrong owner data type', async () => {
+        userId = 123
+
+        try {
+            await logic.retrieveCard(cardId, userId)
+        } catch({message}) {
+            expect(message).to.equal('owner with value 123 is not a string')
+        }
+    })
 
     after(() => mongoose.disconnect())
 })

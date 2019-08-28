@@ -7,15 +7,15 @@ const { User, Card } = require('../../../data')
  * 
  * @param {string} id 
  * @param {string} number 
- * @param {date} expiry 
+ * @param {date} expiration 
  * 
  * @returns {Promise}
  */
 
-module.exports = function(id, number, expiry) {
+module.exports = function(id, number, expiration) {
     validate.string(id, 'id')
     validate.string(number, 'number')
-    /* validate.date(expiry, 'expiry date') */
+    /* validate.date(expiration, 'expiration date') */
 
     return User.findById(id)
         .then(user => {
@@ -25,7 +25,7 @@ module.exports = function(id, number, expiry) {
 
             if (existing) throw new Error(`user with id ${id} already has card number ${number}`)
 
-            user.cards.push(new Card({ number, expiry }))
+            user.cards.push(new Card({ number, expiration }))
 
             return user.save()
         })
@@ -39,8 +39,8 @@ module.exports = function(id, number, expiry) {
             if (card) throw Error('card already exists')
             _user = user
             // Call to convertDate (in utils) to format string to date
-            const expiryDate = convertDate(expiry)
-            return Card.create({ number, expiry: expiryDate})
+            const expirationDate = convertDate(expiration)
+            return Card.create({ number, expiration: expirationDate})
         })
         .then(newCard => {
             cardId = newCard._id

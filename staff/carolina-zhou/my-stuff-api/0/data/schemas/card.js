@@ -8,7 +8,7 @@ module.exports = new Schema({
         type: String,
         required: true
     },
-    expiry: {
+    expiration: {
         type: Date,
         required: true
     }

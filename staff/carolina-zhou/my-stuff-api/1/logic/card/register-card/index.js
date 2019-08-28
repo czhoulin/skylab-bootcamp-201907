@@ -6,15 +6,15 @@ const { User, Card } = require('../../../data')
  * 
  * @param {string} id 
  * @param {string} number 
- * @param {date} expiry 
+ * @param {date} expiration 
  * 
  * @returns {Promise}
  */
 
-module.exports = function(id, number, expiry) {
-    validate.string(id, 'id')
+module.exports = function(id, number, expiration) {
+    validate.string(id, 'user id')
     validate.string(number, 'number')
-    /* validate.date(expiry, 'expiry date') */
+    validate.date(expiration, 'expiration') 
 
     return (async () => {
         const user = await User.findById(id)
@@ -25,7 +25,7 @@ module.exports = function(id, number, expiry) {
 
         if (existing) throw new Error(`user with id ${id} already has card number ${number}`)
 
-        const card = new Card({ number, expiry })
+        const card = new Card({ number, expiration })
 
         user.cards.push(card)
 
@@ -42,7 +42,7 @@ module.exports = function(id, number, expiry) {
 
             if (existing) throw new Error(`user with id ${id} already has card number ${number}`)
 
-            user.cards.push(new Card({ number, expiry }))
+            user.cards.push(new Card({ number, expiration }))
 
             return user.save()
         })
