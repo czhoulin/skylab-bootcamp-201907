@@ -8,17 +8,18 @@ describe('logic - register user', () => {
 
     let name, surname, email, password
 
-    beforeEach(() => {
+    beforeEach(async() => {
         name = `name-${Math.random()}`
         surname = `surname-${Math.random()}`
         email = `email-${Math.random()}@domain.com`
         password = `password-${Math.random()}`
 
-        return User.deleteMany()
+        await User.deleteMany()
     })
 
     it('should succeed on correct data', async () => {
         const result = await logic.registerUser(name, surname, email, password)
+        expect(result).to.exist
 
         const user = await User.findOne({ email })
         expect(user).to.exist

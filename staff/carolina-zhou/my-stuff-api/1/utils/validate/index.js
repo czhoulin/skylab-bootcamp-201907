@@ -15,7 +15,8 @@ module.exports = {
         },
 
         boolean(target, name) {
-            if (typeof target !== 'boolean') throw TypeError(`${name} with value ${target} is not a boolean`)
+            if (typeof target !== 'boolean' && target !== '') throw TypeError(`${name} with value ${target} is not a boolean`)
+            if (target === '') throw new Error(`${name} is empty or blank`)
         },
 
         date(target, name) {
