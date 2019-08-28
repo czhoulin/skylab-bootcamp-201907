@@ -12,9 +12,11 @@ const { Vehicle } = require('../../../data')
 
 module.exports = function(id, fieldsToUpdate) {
     validate.string(id, 'vehicle id')
+    validate.object(fieldsToUpdate, 'body')
 
-    return Vehicle.findByIdAndUpdate(id, { $set: fieldsToUpdate })
-        .then(vehicle => {
-             if (!vehicle) throw Error(`vehicle with id ${id} does not exist`)
-        })
+    return (async() => {
+        const vehicle = await Vehicle.findByIdAndUpdate(id, { $set: fieldsToUpdate })
+            
+        if (!vehicle) throw new Error(`vehicle with id ${id} does not exist`)
+    })()
 }

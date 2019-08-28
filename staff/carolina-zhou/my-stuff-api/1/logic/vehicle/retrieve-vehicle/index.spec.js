@@ -9,7 +9,7 @@ describe('logic - retrieve vehicle', () => {
     
     let brand, model, year, type, color, electric, plate, id, vehicleId
 
-    beforeEach(() => {
+    beforeEach(async() => {
         const typeArray = ['tourism', 'suv', 'van', 'coupe', 'cabrio', 'roadster', 'truck']
 
         brand = `brand-${Math.random()}`
@@ -20,48 +20,50 @@ describe('logic - retrieve vehicle', () => {
         electric = Boolean(Math.round(Math.random()))
         plate = `plate-${Math.random()}`
         
-        return Vehicle.deleteMany()
-            .then(() => {
-                name = `name-${Math.random()}`
-                surname = `surname-${Math.random()}`
-                email = `email-${Math.random()}@email.com`
-                password = `123-${Math.random()}`
+        await Vehicle.deleteMany()
 
-                return User.create({ name, surname, email, password })
-            })
-            .then(() => Vehicle.create({brand, model, year, type, color, electric, plate}))
-            .then(vehicle => vehicleId = vehicle.id)
+        const newVehicle = await Vehicle.create({brand, model, year, type, color, electric, plate})
+        vehicleId = newVehicle.id.toString()
     })
 
-    it('should succeed on correct data', () =>
-        logic.retrieveVehicle(vehicleId)
-/*             .then(result => {
-                expect(result).to.exist
-                return Vehicle.findOne({ plate })
-            }) */
-            .then(vehicle => {
-                expect(vehicle).to.exist
-                expect(vehicle.id).to.equal(vehicleId)
-                expect(vehicle.brand).to.equal(brand)
-                expect(vehicle.model).to.equal(model)
-                expect(vehicle.year).to.equal(year)
-                expect(vehicle.type).to.equal(type)
-                expect(vehicle.color).to.equal(color)
-                expect(vehicle.electric).to.equal(electric)
-            })
-    )
+    it('should succeed on correct data', async () => {
+        const result = await logic.retrieveVehicle(vehicleId)
+        expect(result).to.exist
+        
+        const vehicle = await Vehicle.findOne({ plate })
+        expect(vehicle).to.exist
+        expect(vehicle.id).to.equal(vehicleId)
+        expect(vehicle.brand).to.equal(brand)
+        expect(vehicle.model).to.equal(model)
+        expect(vehicle.year).to.equal(year)
+        expect(vehicle.type).to.equal(type)
+        expect(vehicle.color).to.equal(color)
+        expect(vehicle.electric).to.equal(electric)
+    })
 
-    it('should fail on undefined id', () => 
-        expect(() => 
-               logic.retrieveVehicle(undefined)
-    ).to.throw(`vehicle ID with value undefined is not a string`)
-    )
+    it('should fail on empty id', async () => {
+        try{
+            await logic.retrieveVehicle(' ')
+        } catch({ message }) {
+            expect(message).to.equal('vehicle ID is empty or blank')
+        }
+    })
 
-    it('should fail on wrong data type', () => 
-        expect(() => 
-               logic.retrieveVehicle(123)
-    ).to.throw(`vehicle ID with value 123 is not a string`)
-    )
+    it('should fail on undefined id', async () => {
+          try{
+            await logic.retrieveVehicle(undefined)
+        } catch({ message }) {
+            expect(message).to.equal("vehicle ID with value undefined is not a string")
+        }
+    })
+     
+    it('should fail on wrong id data type', async() => {
+         try{
+            await logic.retrieveVehicle(123)
+        } catch({ message }) {
+                expect(message).to.equal("vehicle ID with value 123 is not a string")
+        }
+    })
 
     after(() => mongoose.disconnect())
 })

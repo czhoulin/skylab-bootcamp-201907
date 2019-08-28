@@ -21,7 +21,7 @@ describe('logic - update user', () => {
             password: `password-${Math.random()}`,
             extra: `extra-${Math.random()}`
         }
-
+        
         await User.deleteMany()
         const user = await User.create({ name, surname, email, password })
         id = user.id

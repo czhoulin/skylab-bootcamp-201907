@@ -9,7 +9,7 @@ describe('logic - retrieve all vehicles', () => {
     
     let brand, model, year, type, color, electric, plate, id
 
-    beforeEach(() => {
+    beforeEach(async() => {
         const typeArray = ['tourism', 'suv', 'van', 'coupe', 'cabrio', 'roadster', 'truck']
 
         brand = `brand-${Math.random()}`
@@ -20,53 +20,44 @@ describe('logic - retrieve all vehicles', () => {
         electric = Boolean(Math.round(Math.random()))
         plate = `plate-${Math.random()}`
 
-        return Vehicle.deleteMany()
-            .then(() => {
-                name = `name-${Math.random()}`
-                surname = `surname-${Math.random()}`
-                email = `email-${Math.random()}@email.com`
-                password = `123-${Math.random()}`
+        await Vehicle.deleteMany()
+        name = `name-${Math.random()}`
+        surname = `surname-${Math.random()}`
+        email = `email-${Math.random()}@email.com`
+        password = `123-${Math.random()}`
 
-                return User.create({ name, surname, email, password })
-            })
-            .then(user => id = user._id.toString())
+        const user = await User.create({ name, surname, email, password })
+        id = user._id.toString()
     })
 
-    it('should succeed on correct data', () =>
-        logic.retrieveAllVehicles(id)
-            .then(result => {
-                expect(result).to.exist
-                return Vehicle.findOne({ plate })
-            })
-            /* .then(vehicle => {
-                expect(vehicle).to.exist
-                expect(vehicle.id).to.equal(vehicleId)
-                expect(vehicle.brand).to.equal(brand)
-                expect(vehicle.model).to.equal(model)
-                expect(vehicle.year).to.equal(year)
-                expect(vehicle.type).to.equal(type)
-                expect(vehicle.color).to.equal(color)
-                expect(vehicle.electric).to.equal(electric)
-            }) */
-    )
+    it('should succeed on correct data', async() => {
+        const vehicles = logic.retrieveAllVehicles(id)
+        expect(vehicles).to.exist
+    })
 
-    it('should fail on empty id', () => 
-        expect(() => 
-               logic.retrieveAllVehicles('')
-        ).to.throw('user id is empty or blank')
-    )
+    it('should fail on empty id', async () => {
+        try{
+            await logic.retrieveAllVehicles(' ')
+        } catch({ message }) {
+            expect(message).to.equal('user id is empty or blank')
+        }
+    })
 
-    it('should fail on undefined id', () => 
-        expect(() => 
-               logic.retrieveAllVehicles(undefined)
-    ).to.throw(`user id with value undefined is not a string`)
-    )
-
-    it('should fail on wrong data type', () => 
-        expect(() => 
-               logic.retrieveAllVehicles(123)
-    ).to.throw(`user id with value 123 is not a string`)
-    )
+    it('should fail on undefined id', async () => {
+          try{
+            await logic.retrieveAllVehicles(undefined)
+        } catch({ message }) {
+            expect(message).to.equal("user id with value undefined is not a string")
+        }
+    })
+     
+    it('should fail on wrong id data type', async() => {
+         try{
+            await logic.retrieveAllVehicles(123)
+        } catch({ message }) {
+                expect(message).to.equal("user id with value 123 is not a string")
+        }
+    })
 
     after(() => mongoose.disconnect())
 })

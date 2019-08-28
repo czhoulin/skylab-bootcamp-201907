@@ -13,8 +13,8 @@ module.exports = function(id) {
 
     validate.string(id, 'vehicle ID')
 
-    return Vehicle.deleteOne({ _id: id })
-        .then(response => {
-            if (!response.deletedCount) throw Error(`wrong id`)
-        })
+    return (async() => {
+        const response = await Vehicle.deleteOne({ _id: id })
+        if (!response.deletedCount) throw Error(`wrong id`)
+    })()
 }

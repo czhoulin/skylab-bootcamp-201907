@@ -6,30 +6,32 @@ const mongoose = require('mongoose')
 describe('logic - unregister vehicle', () => {
     before(() => mongoose.connect('mongodb://localhost/my-api-test', { useNewUrlParser: true }))
 
-    /* let name, surname, email, password, id
+    let brand, model, year, type, color, electric, plate, id
 
-    beforeEach(() => {
-        name = `name-${Math.random()}`
-        surname = `surname-${Math.random()}`
-        email = `email-${Math.random()}@domain.com`
-        password = `password-${Math.random()}`
+    beforeEach(async() => {
+        const typeArray = ['tourism', 'suv', 'van', 'coupe', 'cabrio', 'roadster', 'truck']
 
-        return User.deleteMany()
-            .then(() => User.create({ name, surname, email, password }))
-            .then(user => id = user.id)
+        brand = `brand-${Math.random()}`
+        model = `model-${Math.random()}`
+        year = Number((Math.random()*1000).toFixed())
+        type = `${typeArray[Math.floor(Math.random() * typeArray.length)]}`
+        color = `color-${Math.random()}`
+        electric = Boolean(Math.round(Math.random()))
+        plate = `plate-${Math.random()}`
+
+
+        await Vehicle.deleteMany()
+
+        const newVehicle = await Vehicle.create({brand, model, year, type, color, electric, plate})
+        id = newVehicle.id
     })
 
-    it('should succeed on correct data', () =>
-        logic.unregisterVehicle(id)
-            .then(result => {
-                expect(result).not.to.exist
-
-                return User.findById(id)
-            })
-            .then(user => {
-                expect(user).not.to.exist
-            })
-    ) */
+    it('should succeed on correct data', async () => {
+        const result = await logic.unregisterVehicle(id)
+        expect(result).not.to.exist
+        const user = await User.findById(id)
+        expect(user).not.to.exist
+    })
 
     it('should fail on undefined id', () => 
         expect(() => 
